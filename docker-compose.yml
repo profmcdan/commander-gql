@@ -2,11 +2,20 @@ version: "3.9"
 
 services:
   api:
+    container_name: commanderapi
     build: .
+    environment:
+      - "ASPNETCORE_URLS=https://+;http://+"
+      - Kestrel__Certificates__Default__Path=/app/Infrastructure/Certificate/cert-aspnetcore.pfx
+      - Kestrel__Certificates__Default__Password=SecretPassword
     ports:
-      - "12000:80"
+      - 12000:80
+      - 12001:443
+      - 5000:5000
+      - 5001:5001
     depends_on:
       - db
+    restart: on-failure
   
   db:
     image: postgres:12.1-alpine
